@@ -50,11 +50,11 @@ export class VehiculosService {
   }
   
 
-  update(id: number, updateVehiculoDto: UpdateVehiculoDto) {
+  update(id: string, updateVehiculoDto: UpdateVehiculoDto) {
     return `This action updates a #${id} vehiculo`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} vehiculo`;
   }
 }

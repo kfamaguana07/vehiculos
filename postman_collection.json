@@ -1,0 +1,136 @@
+{
+  "info": {
+    "name": "Vehiculos API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Auto",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"auto\",\n  \"datos\": {\n    \"placa\": \"ABC-1234\",\n    \"marca\": \"Toyota\",\n    \"modelo\": \"Corolla\",\n    \"color\": \"Rojo\",\n    \"anio\": 2022,\n    \"numeroPuertas\": 4,\n    \"capacidadMaletero\": 500\n  }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/vehiculos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["vehiculos"]
+        }
+      }
+    },
+    {
+      "name": "Create Moto",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"moto\",\n  \"datos\": {\n    \"placa\": \"AB-123C\",\n    \"marca\": \"Yamaha\",\n    \"modelo\": \"MT-07\",\n    \"color\": \"Negro\",\n    \"anio\": 2023,\n    \"tipo\": \"Deportivo\"\n  }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/vehiculos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["vehiculos"]
+        }
+      }
+    },
+    {
+      "name": "Create Camioneta",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"camioneta\",\n  \"datos\": {\n    \"placa\": \"DEF-5678\",\n    \"marca\": \"Ford\",\n    \"modelo\": \"Ranger\",\n    \"color\": \"Blanco\",\n    \"anio\": 2024,\n    \"cabina\": \"Doble\",\n    \"capacidadCarga\": 1500\n  }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/vehiculos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["vehiculos"]
+        }
+      }
+    },
+    {
+      "name": "Get All Vehiculos",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/vehiculos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["vehiculos"]
+        }
+      }
+    },
+    {
+      "name": "Get Vehiculo By ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/vehiculos/:id",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["vehiculos", ":id"],
+          "variable": [
+            { "key": "id", "value": "UUID-DEL-VEHICULO" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Update Vehiculo",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"auto\",\n  \"datos\": {\n    \"color\": \"Azul\",\n    \"anio\": 2025\n  }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/vehiculos/:id",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["vehiculos", ":id"],
+          "variable": [
+            { "key": "id", "value": "UUID-DEL-VEHICULO" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete Vehiculo",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:3000/vehiculos/:id",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["vehiculos", ":id"],
+          "variable": [
+            { "key": "id", "value": "UUID-DEL-VEHICULO" }
+          ]
+        }
+      }
+    }
+  ]
+}

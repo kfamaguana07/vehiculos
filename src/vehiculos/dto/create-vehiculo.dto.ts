@@ -85,7 +85,7 @@ class MotoDto extends BaseVehiculoDto {
 
     @IsString()
     @IsNotEmpty()
-    @Matches(/^[A-Z]{2}-\d{3}^[A-Z]$/, {
+    @Matches(/^[A-Z]{2}-\d{3}[A-Z]$/, {
         message: "La placa de la motocicleta debe tener el formato AB-123C"
     })
     declare placa: string;
@@ -120,7 +120,7 @@ class CamionetaDto extends BaseVehiculoDto {
 
 
 export class CreateVehiculoDto {
-  @IsIn(['Auto', 'Moto', 'Camioneta'])
+  @IsIn(['auto', 'moto', 'camioneta'])
   tipo!: string;
 
   @ValidateNested()
@@ -131,9 +131,9 @@ export class CreateVehiculoDto {
     switch (object.tipo) {
       case 'auto':
         return AutoDto;
-      case 'motocicleta':
+      case 'moto':
         return MotoDto;
-      case 'camion':
+      case 'camioneta':
         return CamionetaDto;
       default:
         return BaseVehiculoDto;
