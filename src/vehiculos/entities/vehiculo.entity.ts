@@ -29,7 +29,7 @@ export abstract class Vehiculo {
     @Column()
     anio!: number;
 
-    @Column({type: 'enum',enum: Clasificacion})
+    @Column({type: 'enum', enum: Clasificacion, default: Clasificacion.GASOLINA})
     clasificacion!: Clasificacion;
 
     

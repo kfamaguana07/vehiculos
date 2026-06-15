@@ -11,50 +11,56 @@ export class VehiculosService {
 
   constructor(
     @InjectRepository(Vehiculo)
-    private repositoryVehiculos: Repository<Vehiculo>,
-  ) {}
+    private repositoryVehiculos:Repository<Vehiculo>
     
-
-  async create(createVehiculoDto: CreateVehiculoDto): Promise<Vehiculo> {
-    const existe = await this.repositoryVehiculos.findOne({ 
-      where: { 
-        placa: createVehiculoDto.datos.placa 
+  ){}
+  async create(createVehiculoDto: CreateVehiculoDto):Promise<Vehiculo> {
+    const existe = await this.repositoryVehiculos.findOne({
+      where:{
+        placa:createVehiculoDto.datos.placa
       }
     });
-
-      if (existe) {
-        throw new Error(`El vehículo con placa ${createVehiculoDto.datos.placa} ya existe.`);
-      }
-
-      const vehiculo = FactoryVehiculos.crear(createVehiculoDto);
-      
-      return this.repositoryVehiculos.save(vehiculo);
+    if(existe){
+      throw new Error( " Ya existe un vehiculo con esa placa")
+    }
+    const vehiculo = FactoryVehiculos.crear(createVehiculoDto);
+    return this.repositoryVehiculos.save(vehiculo);
   }
 
-
-  async findAll() : Promise<Vehiculo[]> {
+  async findAll(): Promise<Vehiculo[]> {
     return this.repositoryVehiculos.find();
   }
 
-
-  async findOne(id: string) : Promise<Vehiculo> {
-    const existe = await this.repositoryVehiculos.findOne({ 
-      where: { 
-        id: id,
+  async findOne(id: string):Promise<Vehiculo> {
+    const existe = await this.repositoryVehiculos.findOne({
+      where:{
+        id:id,
       }
     });
-    if (!existe) {
-      throw new Error(`El vehículo con id ${id} no existe.`);
-    }
+    if(!existe)throw new Error('Vehiculo no encontrado')
     return existe;
   }
-  
 
-  update(id: string, updateVehiculoDto: UpdateVehiculoDto) {
-    return `This action updates a #${id} vehiculo`;
+  async update(id: string, updateVehiculoDto: UpdateVehiculoDto): Promise<Vehiculo> {
+    const vehiculo = await this.findOne(id);
+
+    if (updateVehiculoDto.datos) {
+      if (updateVehiculoDto.datos.placa && updateVehiculoDto.datos.placa !== vehiculo.placa) {
+        const existe = await this.repositoryVehiculos.findOne({
+          where: { placa: updateVehiculoDto.datos.placa }
+        });
+        if (existe) {
+          throw new Error(`El vehículo con placa ${updateVehiculoDto.datos.placa} ya existe.`);
+        }
+      }
+      Object.assign(vehiculo, updateVehiculoDto.datos);
+    }
+
+    return this.repositoryVehiculos.save(vehiculo);
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} vehiculo`;
+  async remove(id: string): Promise<void> {
+    const vehiculo = await this.findOne(id);
+    await this.repositoryVehiculos.remove(vehiculo);
   }
 }
