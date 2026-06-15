@@ -53,11 +53,15 @@ class BaseVehiculoDto {
     color!: string;
 
 
-    @IsNumber()
     @Min(1885, {
-        message: "El año debe ser mayor o igual a 1885"
+        message: 'El año debe ser mayor o igual a 1885',
     })
-    @IsInt({message: "El año debe ser un número entero"})
+    @Max(new Date().getFullYear() + 1, {
+        message: `El año no puede ser mayor a ${new Date().getFullYear() + 1}`,
+    })
+    @IsInt({
+        message: 'El año debe ser un número entero',
+    })
     anio!: number;
 }
 
