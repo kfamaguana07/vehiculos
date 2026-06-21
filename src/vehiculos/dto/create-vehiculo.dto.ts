@@ -63,6 +63,12 @@ class BaseVehiculoDto {
         message: 'El año debe ser un número entero',
     })
     anio!: number;
+
+    @IsString()
+    @IsIn(['Electrico', 'Hibrido', 'Gasolina', 'Diesel'], {
+        message: 'La clasificación debe ser: Electrico, Hibrido, Gasolina o Diesel'
+    })
+    clasificacion!: string;
 }
 
 
@@ -99,7 +105,7 @@ class MotoDto extends BaseVehiculoDto {
     @Matches(/^(Deportivo|Scooter|Motocross)$/, {
         message: "El tipo de motocicleta debe ser Deportivo, Scooter o Motocross"
     })
-    tipo!: string;
+    tipoMoto!: string;
 }
 
 

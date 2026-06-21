@@ -27,8 +27,17 @@ export class VehiculosService {
     return this.repositoryVehiculos.save(vehiculo);
   }
 
-  async findAll(): Promise<Vehiculo[]> {
-    return this.repositoryVehiculos.find();
+  async findAll(tipo?: string): Promise<Vehiculo[]> {
+    const where: any = {};
+    if (tipo) {
+      const tipoMap: Record<string, string> = {
+        auto: 'Auto',
+        moto: 'Motocicleta',
+        camioneta: 'Camioneta',
+      };
+      where.tipo = tipoMap[tipo.toLowerCase()];
+    }
+    return this.repositoryVehiculos.find({ where });
   }
 
   async findOne(id: string):Promise<Vehiculo> {
@@ -44,17 +53,15 @@ export class VehiculosService {
   async update(id: string, updateVehiculoDto: UpdateVehiculoDto): Promise<Vehiculo> {
     const vehiculo = await this.findOne(id);
 
-    if (updateVehiculoDto.datos) {
-      if (updateVehiculoDto.datos.placa && updateVehiculoDto.datos.placa !== vehiculo.placa) {
-        const existe = await this.repositoryVehiculos.findOne({
-          where: { placa: updateVehiculoDto.datos.placa }
-        });
-        if (existe) {
-          throw new Error(`El vehículo con placa ${updateVehiculoDto.datos.placa} ya existe.`);
-        }
+    if (updateVehiculoDto.placa && updateVehiculoDto.placa !== vehiculo.placa) {
+      const existe = await this.repositoryVehiculos.findOne({
+        where: { placa: updateVehiculoDto.placa }
+      });
+      if (existe) {
+        throw new Error(`El vehículo con placa ${updateVehiculoDto.placa} ya existe.`);
       }
-      Object.assign(vehiculo, updateVehiculoDto.datos);
     }
+    Object.assign(vehiculo, updateVehiculoDto);
 
     return this.repositoryVehiculos.save(vehiculo);
   }
