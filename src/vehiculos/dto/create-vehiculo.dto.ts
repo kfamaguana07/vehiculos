@@ -1,8 +1,10 @@
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsIn, IsInt, IsNotEmpty, IsNumber, IsString, Matches, Max, MaxLength, Min, MinLength, ValidateNested } from "class-validator";
 
-class BaseVehiculoDto {
+export class BaseVehiculoDto {
     
+    @ApiProperty({ description: 'Placa del vehículo', example: 'ABC-1234' })
     @IsString()
     @IsNotEmpty()
     @Matches(/^[A-Z]{3}-\d{4}$/, {
@@ -11,6 +13,7 @@ class BaseVehiculoDto {
     placa!: string;
 
 
+    @ApiProperty({ description: 'Marca del vehículo', example: 'Toyota', minLength: 2, maxLength: 30 })
     @IsString()
     @IsNotEmpty()
     @MinLength(2, {
@@ -25,6 +28,7 @@ class BaseVehiculoDto {
     marca!: string;
 
 
+    @ApiProperty({ description: 'Modelo del vehículo', example: 'Corolla', minLength: 2, maxLength: 150 })
     @IsString()
     @IsNotEmpty()
     @MinLength(2, {
@@ -39,6 +43,7 @@ class BaseVehiculoDto {
     modelo!: string;
 
 
+    @ApiProperty({ description: 'Color del vehículo', example: 'Rojo', minLength: 2, maxLength: 150 })
     @IsString()
     @IsNotEmpty()
     @MinLength(2, {
@@ -53,6 +58,7 @@ class BaseVehiculoDto {
     color!: string;
 
 
+    @ApiProperty({ description: 'Año del vehículo', example: 2024, minimum: 1885 })
     @Min(1885, {
         message: 'El año debe ser mayor o igual a 1885',
     })
@@ -64,6 +70,7 @@ class BaseVehiculoDto {
     })
     anio!: number;
 
+    @ApiProperty({ description: 'Clasificación del vehículo', enum: ['Electrico', 'Hibrido', 'Gasolina', 'Diesel'], example: 'Gasolina' })
     @IsString()
     @IsIn(['Electrico', 'Hibrido', 'Gasolina', 'Diesel'], {
         message: 'La clasificación debe ser: Electrico, Hibrido, Gasolina o Diesel'
@@ -72,8 +79,9 @@ class BaseVehiculoDto {
 }
 
 
-class AutoDto extends BaseVehiculoDto {
+export class AutoDto extends BaseVehiculoDto {
 
+    @ApiProperty({ description: 'Número de puertas del auto', example: 4, minimum: 2, maximum: 5 })
     @Min(2, {
         message: "El número de puertas debe ser al menos 2"
     })
@@ -83,6 +91,7 @@ class AutoDto extends BaseVehiculoDto {
     @IsInt({message: "El número de puertas debe ser un número entero"})
     numeroPuertas!: number;
 
+    @ApiProperty({ description: 'Capacidad del maletero en litros', example: 470, minimum: 0 })
     @Min(0, {
         message: "La capacidad del maletero debe ser un número positivo"
     })
@@ -91,8 +100,9 @@ class AutoDto extends BaseVehiculoDto {
 }
 
 
-class MotoDto extends BaseVehiculoDto {
+export class MotoDto extends BaseVehiculoDto {
 
+    @ApiProperty({ description: 'Placa de la motocicleta', example: 'AB-123C' })
     @IsString()
     @IsNotEmpty()
     @Matches(/^[A-Z]{2}-\d{3}[A-Z]$/, {
@@ -100,6 +110,7 @@ class MotoDto extends BaseVehiculoDto {
     })
     declare placa: string;
 
+    @ApiProperty({ description: 'Tipo de motocicleta', enum: ['Deportivo', 'Scooter', 'Motocross'], example: 'Deportivo' })
     @IsString()
     @IsNotEmpty()
     @Matches(/^(Deportivo|Scooter|Motocross)$/, {
@@ -109,8 +120,9 @@ class MotoDto extends BaseVehiculoDto {
 }
 
 
-class CamionetaDto extends BaseVehiculoDto {
+export class CamionetaDto extends BaseVehiculoDto {
 
+    @ApiProperty({ description: 'Tipo de cabina', example: 'Simple', maxLength: 150 })
     @IsString()
     @IsNotEmpty()
     @Matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,\-#&()]+$/, {
@@ -118,6 +130,7 @@ class CamionetaDto extends BaseVehiculoDto {
     })
     cabina!: string;
 
+    @ApiProperty({ description: 'Capacidad de carga en kg', example: 1500, minimum: 0, maximum: 100000 })
     @Min(0, {
         message: "La capacidad de carga debe ser un número positivo"
     })
@@ -130,9 +143,26 @@ class CamionetaDto extends BaseVehiculoDto {
 
 
 export class CreateVehiculoDto {
+  @ApiProperty({ description: 'Tipo de vehículo', enum: ['auto', 'moto', 'camioneta'], example: 'auto' })
   @IsIn(['auto', 'moto', 'camioneta'])
   tipo!: string;
 
+  @ApiProperty({
+    description: 'Datos específicos del vehículo según el tipo',
+    oneOf: [
+      { $ref: '#/components/schemas/AutoDto' },
+      { $ref: '#/components/schemas/MotoDto' },
+      { $ref: '#/components/schemas/CamionetaDto' },
+    ],
+    discriminator: {
+      propertyName: 'tipo',
+      mapping: {
+        auto: '#/components/schemas/AutoDto',
+        moto: '#/components/schemas/MotoDto',
+        camioneta: '#/components/schemas/CamionetaDto',
+      },
+    },
+  })
   @ValidateNested()
   @Type((opts) => {
     const object = opts?.object as CreateVehiculoDto;

@@ -1,6 +1,8 @@
+import { ApiPropertyOptional } from "@nestjs/swagger";
 import { IsIn, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength } from "class-validator";
 
 export class UpdateVehiculoDto {
+    @ApiPropertyOptional({ description: 'Placa del vehículo', example: 'ABC-1234' })
     @IsOptional()
     @IsString()
     @IsNotEmpty()
@@ -9,6 +11,7 @@ export class UpdateVehiculoDto {
     })
     placa?: string;
 
+    @ApiPropertyOptional({ description: 'Marca del vehículo', example: 'Toyota', minLength: 2, maxLength: 30 })
     @IsOptional()
     @IsString()
     @IsNotEmpty()
@@ -23,6 +26,7 @@ export class UpdateVehiculoDto {
     })
     marca?: string;
 
+    @ApiPropertyOptional({ description: 'Modelo del vehículo', example: 'Corolla', minLength: 2, maxLength: 150 })
     @IsOptional()
     @IsString()
     @IsNotEmpty()
@@ -37,6 +41,7 @@ export class UpdateVehiculoDto {
     })
     modelo?: string;
 
+    @ApiPropertyOptional({ description: 'Color del vehículo', example: 'Rojo', minLength: 2, maxLength: 150 })
     @IsOptional()
     @IsString()
     @IsNotEmpty()
@@ -51,6 +56,7 @@ export class UpdateVehiculoDto {
     })
     color?: string;
 
+    @ApiPropertyOptional({ description: 'Año del vehículo', example: 2024, minimum: 1885 })
     @IsOptional()
     @Min(1885, {
         message: 'El año debe ser mayor o igual a 1885',
@@ -63,6 +69,7 @@ export class UpdateVehiculoDto {
     })
     anio?: number;
 
+    @ApiPropertyOptional({ description: 'Clasificación del vehículo', enum: ['Electrico', 'Hibrido', 'Gasolina', 'Diesel'], example: 'Gasolina' })
     @IsOptional()
     @IsString()
     @IsIn(['Electrico', 'Hibrido', 'Gasolina', 'Diesel'], {
